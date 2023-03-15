@@ -1,0 +1,60 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Mar 15 09:06:59 2023
+
+@author: benja
+"""
+
+
+import numpy
+
+WAR0=5.0
+ExpiryYears=8
+Age0=22
+OptionValue=28
+TenorYears=1
+FrontYearCost=14
+SumWAR=0.0
+TeamExercise=0.0
+ExerciseWAR=0.0
+LeaveWAR=0.0
+SVE=0.0
+
+for i in range (1000000):
+    WARCount=WAR0
+    YearCount=0
+    SumWARIter=0.0
+    AgeCount=Age0
+    WinCost=8
+    ThisOptOut=0
+    while YearCount < ExpiryYears:
+        SumWARIter+=WARCount
+        SkillChange=numpy.random.normal()*1.4
+        WARCount+=SkillChange
+        WARCount+=(WAR0-WARCount)*.08
+        AgeCount+=1
+        YearCount+=1
+        if AgeCount>29:
+            WARCount-=.4
+        CostChange=numpy.random.normal()*.5+.1
+        WinCost+=CostChange
+        
+    AgeFinal=AgeCount+TenorYears-1
+    DeclineYears=(max(AgeFinal,29)-max(AgeCount,29))
+    AgePenalty = DeclineYears*(DeclineYears+1)/5
+  
+    if WARCount*WinCost>OptionValue:
+        TeamExercise+=1
+        ExerciseWAR+=WARCount
+        SVE+=WARCount*WinCost-OptionValue
+        
+    else:
+        LeaveWAR+=WARCount
+    
+
+print ("Odds of team option exercise are "+ str(TeamExercise/1000000))
+print ("2031 WAR when exercised is "+str(round(ExerciseWAR/TeamExercise,2)))
+print ("2031 WAR when not exercised is "+str(round(LeaveWAR/(1000000-TeamExercise),2)))
+print ("Surplus Value to team when exercised is "+str(round(SVE/TeamExercise,2)))
+print ("Expected Surplus Value is "+str(round(SVE/(1000000),2)))
+
