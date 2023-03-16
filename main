@@ -11,7 +11,7 @@ import numpy
 WAR0=5.0
 ExpiryYears=8
 Age0=22
-OptionValue=28
+OptionValue=23
 TenorYears=1
 FrontYearCost=14
 SumWAR=0.0
